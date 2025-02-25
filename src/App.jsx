@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 import ContactList from "./components/ContactList/ContactList.jsx";
@@ -9,10 +8,6 @@ function App() {
   const contactsData = useSelector((state) => state.contacts);
   const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    window.localStorage.setItem("saved-contacts", JSON.stringify(contactsData));
-  }, [contactsData]);
 
   const filtered = contactsData.filter((contact) =>
     contact.name.toLowerCase().includes(filter.toLowerCase())

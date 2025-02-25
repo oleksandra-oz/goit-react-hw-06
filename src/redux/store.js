@@ -1,5 +1,7 @@
 import { createStore } from 'redux';
 import { combineReducers } from 'redux';
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
   contacts: [
@@ -36,6 +38,19 @@ const rootReducer = combineReducers({
   filter: filterReducer
 });
 
-const store = createStore(rootReducer);
+// Конфігурація persist
+const persistConfig = {
+  key: "root",
+  storage, // Зберігаємо в localStorage
+  whitelist: ["contacts"], // Тільки contacts буде збережено
+};
+
+// Підключаємо persist до редюсера
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Створюємо store
+const store = createStore(persistedReducer);
+export const persistor = persistStore(store); // Persistor для PersistGate
+
 
 export default store;
