@@ -3,33 +3,36 @@ import "./App.css";
 import ContactList from "./components/ContactList/ContactList.jsx";
 import SearchBox from "./components/SearchBox/SearchBox.jsx";
 import ContactForm from "./components/ContactForm/ContactForm.jsx";
+import { addContact, deleteContact } from "./redux/contactsSlice.js";
+import { changeFilter } from "./redux/filtersSlice.js";
 
 function App() {
-  const contactsData = useSelector((state) => state.contacts);
-  const filter = useSelector((state) => state.filter);
+  const contactsData = useSelector((state) => state.contacts.items);
+  const filteredContacts = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
-  const filtered = contactsData.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filtered =
+    contactsData?.filter((contact) =>
+      contact.name.toLowerCase().includes(filteredContacts.toLowerCase())
+    ) || [];
 
-  const addContact = (newContact) => {
-    dispatch({ type: "ADD_CONTACT", payload: newContact });
+  const handleAddContact = (newContact) => {
+    dispatch(addContact(newContact));
   };
 
   const handleDelete = (myId) => {
-    dispatch({ type: "DELETE_CONTACT", payload: myId });
+    dispatch(deleteContact(myId));
   };
 
   const handleFilterChange = (newFilter) => {
-    dispatch({ type: "SET_FILTER", payload: newFilter });
+    dispatch(changeFilter(newFilter));
   };
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm onAdd={addContact} />
-      <SearchBox value={filter} onChange={handleFilterChange} />
+      <ContactForm onAdd={handleAddContact} />
+      <SearchBox value={filteredContacts} onChange={handleFilterChange} />
       <ContactList contactsData={filtered} handleDelete={handleDelete} />
     </div>
   );
