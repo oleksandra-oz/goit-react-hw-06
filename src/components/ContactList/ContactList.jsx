@@ -3,7 +3,8 @@ import { deleteContact } from "../../redux/contactsSlice";
 
 const ContactList = () => {
   const contactsData = useSelector((state) => state.contacts.items);
-  console.log("contactsData state:", contactsData);
+  const state = useSelector((state) => state);
+  console.log("FULL STATE:", state);
   const filteredContacts = useSelector((state) => state.filter.search);
   const filtered = contactsData?.filter((contact) =>
     contact.name.toLowerCase().includes(filteredContacts.toLowerCase())
